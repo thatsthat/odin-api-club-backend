@@ -13,6 +13,11 @@ const ArticleSchema = new Schema({
 });
 
 // Virtual for item's URL
+ArticleSchema.virtual("rawText").get(function () {
+  `${this._id}
+});
+
+// Virtual for item's URL
 ArticleSchema.virtual("url").get(function () {
   // We don't use an arrow function as we'll need the this object
   return `/article/${this._id}`;
