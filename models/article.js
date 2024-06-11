@@ -13,9 +13,7 @@ const ArticleSchema = new Schema({
 });
 
 // Virtual for item's URL
-ArticleSchema.virtual("rawText").get(function () {
-  `${this._id}
-});
+ArticleSchema.virtual("rawText").get(function () {});
 
 // Virtual for item's URL
 ArticleSchema.virtual("url").get(function () {

@@ -76,28 +76,24 @@ exports.signup = [
 
     if (!errors.isEmpty()) {
       // There are errors.
-      throw new Error("Invalid signup data");
+      return res.status(400).json({ error: errors.array()[0].msg });
     } else {
       // Signup data is valid. Proceed with signup
-      next();
-    }
-  }),
-  asyncHandler(async (req, res, next) => {
-    try {
-      bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
-        const user = new User({
-          firstName: req.body.firstName,
-          lastName: req.body.lastName,
-          email: req.body.email,
-          password: hashedPassword,
-          isAdmin: true,
-          isWriter: true,
+      try {
+        bcrypt.hash(req.body.password, 10, async (err, hashedPassword) => {
+          const user = new User({
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            password: hashedPassword,
+            isAdmin: true,
+            isWriter: true,
+          });
+          const result = await user.save();
         });
-        const result = await user.save();
-      });
-      res.redirect("/");
-    } catch (err) {
-      return next(err);
+      } catch (err) {
+        return next(err);
+      }
     }
   }),
 ];
