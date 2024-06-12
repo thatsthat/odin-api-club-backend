@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
 
 exports.login = (req, res) => {
   // Mock user
@@ -95,6 +96,36 @@ exports.signup = [
         return next(err);
       }
     }
+  }),
+];
+
+exports.login = [
+  // Validate and sanitize fields.
+  body("username", "Please provide a username and password")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("password", "Please provide a username and password")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+
+  // Process request after validation and sanitization.
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: errors.array()[0].msg });
+    } else {
+      // Data from form is valid. Proceed with authentication
+      next();
+    }
+  }),
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login-error",
+    failureMessage: true,
   }),
 ];
 
