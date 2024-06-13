@@ -3,9 +3,8 @@ const asyncHandler = require("express-async-handler");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
-const passport = require("passport");
 
-exports.login = (req, res) => {
+exports.login000 = (req, res) => {
   // Mock user
   const user = {
     id: 33,
@@ -101,11 +100,11 @@ exports.signup = [
 
 exports.login = [
   // Validate and sanitize fields.
-  body("username", "Please provide a username and password")
+  body("email", "Please provide an email and password")
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("password", "Please provide a username and password")
+  body("password", "Please provide an email and password")
     .trim()
     .isLength({ min: 1 })
     .escape(),
@@ -122,10 +121,31 @@ exports.login = [
       next();
     }
   }),
-  passport.authenticate("local", {
-    successRedirect: "/",
-    failureRedirect: "/login-error",
-    failureMessage: true,
+  asyncHandler(async (req, res, next) => {
+    try {
+      const user = await User.findOne({ email: req.body.email });
+      if (!user) {
+        return res.status(403).json({ error: "Incorrect username" });
+      }
+      const match = await bcrypt.compare(req.body.password, user.password);
+      if (!match) {
+        // passwords do not match!
+        return res.status(403).json({ error: "Incorrect password" });
+      } else {
+        const tokn = jwt.sign(
+          { user },
+          "iepiep",
+          { expiresIn: "180s" },
+          (err, token) => {
+            return res.json({
+              token,
+            });
+          }
+        );
+      }
+    } catch (err) {
+      return next(err);
+    }
   }),
 ];
 
