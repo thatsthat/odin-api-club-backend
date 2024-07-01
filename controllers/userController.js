@@ -135,7 +135,7 @@ exports.login = [
         const tokn = jwt.sign(
           { user },
           "iepiep",
-          { expiresIn: "180s" },
+          { expiresIn: "3600s" },
           (err, token) => {
             return res.json({
               token,

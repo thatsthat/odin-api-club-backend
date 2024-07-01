@@ -7,17 +7,18 @@ const jwt = require("jsonwebtoken");
 // Handle Post create on POST.
 exports.article_create_post = [
   userController.obtainToken,
-  (req, res) => {
+  (req, res, next) => {
     jwt.verify(req.token, "iepiep", (err, authData) => {
       if (err) {
         console.log(req.user);
         res.sendStatus(403);
         //res.send(authData);
       } else {
-        res.json({
+        /*         res.json({
           message: "Post created...",
           authData,
-        });
+        }); */
+        next();
       }
     });
   },
@@ -34,12 +35,15 @@ exports.article_create_post = [
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
     // Extract the validation errors from a request.
+    console.log(req.body.author);
     const errors = validationResult(req);
 
     // Create a Item object with escaped and trimmed data.
     const article = new Article({
       title: req.body.title,
       text: req.body.text,
+      author: req.body.author,
+      ispublished: true,
     });
 
     if (!errors.isEmpty()) {
