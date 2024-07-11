@@ -10,7 +10,6 @@ exports.article_create_post = [
   (req, res, next) => {
     jwt.verify(req.token, "iepiep", (err, authData) => {
       if (err) {
-        console.log(req.user);
         res.sendStatus(403);
         //res.send(authData);
       } else {
@@ -43,7 +42,7 @@ exports.article_create_post = [
       title: req.body.title,
       text: req.body.text,
       author: req.body.author,
-      ispublished: true,
+      isPublished: true,
     });
 
     if (!errors.isEmpty()) {
@@ -65,6 +64,63 @@ exports.article_list = asyncHandler(async (req, res, next) => {
 
   return res.send(allArticles);
 });
+
+exports.user_articles_list = [
+  userController.obtainToken,
+  (req, res, next) => {
+    jwt.verify(req.token, "iepiep", (err, authData) => {
+      if (err) {
+        res.sendStatus(403);
+        //res.send(authData);
+      } else {
+        /*         res.json({
+          message: "Post created...",
+          authData,
+        }); */
+        next();
+      }
+    });
+  },
+  asyncHandler(async (req, res, next) => {
+    const userArticles = await Article.find(
+      { author: req.body.userId },
+      "title isPublished date"
+    )
+      .sort({ title: 1 })
+      .exec();
+
+    return res.send(userArticles);
+  }),
+];
+
+exports.article_toggle_published = [
+  userController.obtainToken,
+  (req, res, next) => {
+    jwt.verify(req.token, "iepiep", (err, authData) => {
+      if (err) {
+        res.sendStatus(403);
+        //res.send(authData);
+      } else {
+        /*         res.json({
+          message: "Post created...",
+          authData,
+        }); */
+        next();
+      }
+    });
+  },
+  asyncHandler(async (req, res, next) => {
+    let updatedArticle = req.body.article;
+    //console.log(updatedArticle);
+    updatedArticle.isPublished = !updatedArticle.isPublished;
+    const savedArticle = await Article.findByIdAndUpdate(
+      updatedArticle._id,
+      updatedArticle,
+      {}
+    );
+    return res.send(savedArticle);
+  }),
+];
 
 exports.index = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: Site Home Page");

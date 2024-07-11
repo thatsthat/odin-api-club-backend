@@ -12,7 +12,7 @@ exports.login000 = (req, res) => {
     email: "iep@gmail.com",
   };
 
-  jwt.sign({ user }, "iepiep", { expiresIn: "180s" }, (err, token) => {
+  jwt.sign({ user }, "iepiep", { expiresIn: "1800s" }, (err, token) => {
     res.json({
       token,
     });

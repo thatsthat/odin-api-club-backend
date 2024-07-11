@@ -12,6 +12,13 @@ const ArticleSchema = new Schema({
   date: { type: Date, default: Date.now },
 });
 
+ArticleSchema.virtual("dateFormatted").get(function () {
+  return this.date.val.date.toLocaleTimeString("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+});
+
 // Virtual for item's URL
 ArticleSchema.virtual("rawText").get(function () {});
 
