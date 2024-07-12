@@ -122,6 +122,28 @@ exports.article_toggle_published = [
   }),
 ];
 
+exports.article_delete = [
+  userController.obtainToken,
+  (req, res, next) => {
+    jwt.verify(req.token, "iepiep", (err, authData) => {
+      if (err) {
+        res.sendStatus(403);
+        //res.send(authData);
+      } else {
+        /*         res.json({
+          message: "Post created...",
+          authData,
+        }); */
+        next();
+      }
+    });
+  },
+  asyncHandler(async (req, res, next) => {
+    await Article.findByIdAndDelete(req.body.articleID);
+    return res.send(JSON.stringify("article deleted"));
+  }),
+];
+
 exports.index = asyncHandler(async (req, res, next) => {
   res.send("NOT IMPLEMENTED: Site Home Page");
 });

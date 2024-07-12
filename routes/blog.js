@@ -12,6 +12,7 @@ router.post(
   "/article_toggle_published",
   article_controller.article_toggle_published
 );
+router.post("/article_delete", article_controller.article_delete);
 
 router.post("/comment", comment_controller.comment_create_post);
 
