@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 
-exports.login000 = (req, res) => {
+/* exports.login000 = (req, res) => {
   // Mock user
   const user = {
     id: 33,
@@ -17,7 +17,7 @@ exports.login000 = (req, res) => {
       token,
     });
   });
-};
+}; */
 
 // Verify Token
 exports.obtainToken = (req, res, next) => {
@@ -148,7 +148,3 @@ exports.login = [
     }
   }),
 ];
-
-exports.index = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Site Home Page");
-});

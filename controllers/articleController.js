@@ -26,10 +26,7 @@ exports.article_create_post = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("text", "Post text must not be empty.")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
+  body("text", "Post text must not be empty.").isLength({ min: 1 }).escape(),
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
@@ -57,12 +54,28 @@ exports.article_create_post = [
 ];
 
 exports.article_list = asyncHandler(async (req, res, next) => {
-  const allArticles = await Article.find({}, "title text")
+  const allArticles = await Article.find(
+    { isPublished: true },
+    "title text author rawText date"
+  )
     .sort({ title: 1 })
-    .populate("text")
+    .populate("author")
     .exec();
 
-  return res.send(allArticles);
+  const allPosts = allArticles.map((article) => {
+    console.log(article.date);
+    const dateFormatted = article.date.toLocaleDateString("en-GB", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    return `# ${article.title}
+
+\_${dateFormatted} by [${article.author.firstName} ${article.author.lastName}](/)_
+
+${article.text}`;
+  });
+  return res.send(allPosts);
 });
 
 exports.user_articles_list = [
@@ -83,12 +96,11 @@ exports.user_articles_list = [
   },
   asyncHandler(async (req, res, next) => {
     const userArticles = await Article.find(
-      { author: req.body.userId },
-      "title isPublished date"
+      { author: req.params.userId },
+      "title isPublished date rawText"
     )
       .sort({ title: 1 })
       .exec();
-
     return res.send(userArticles);
   }),
 ];
@@ -143,37 +155,3 @@ exports.article_delete = [
     return res.send(JSON.stringify("article deleted"));
   }),
 ];
-
-exports.index = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Site Home Page");
-});
-
-// Display detail page for a specific Post.
-exports.article_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: Post detail: ${req.params.id}`);
-});
-
-// Display Post create form on GET.
-exports.article_create_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Post create GET");
-});
-
-// Display Post delete form on GET.
-exports.article_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Post delete GET");
-});
-
-// Handle Post delete on POST.
-exports.article_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Post delete POST");
-});
-
-// Display Post update form on GET.
-exports.article_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Post update GET");
-});
-
-// Handle Post update on POST.
-exports.article_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Post update POST");
-});

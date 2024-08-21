@@ -7,7 +7,10 @@ const comment_controller = require("../controllers/commentController");
 
 router.post("/article", article_controller.article_create_post);
 router.get("/article_list", article_controller.article_list);
-router.get("/user_articles_list", article_controller.user_articles_list);
+router.get(
+  "/user_articles_list/:userId",
+  article_controller.user_articles_list
+);
 router.post(
   "/article_toggle_published",
   article_controller.article_toggle_published
