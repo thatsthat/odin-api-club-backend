@@ -25,7 +25,8 @@ exports.obtainToken = (req, res, next) => {
   const bearerHeader = req.headers["authorization"];
   // Check if bearer is undefined
   if (typeof bearerHeader !== "undefined") {
-    // Split at the space
+    // Split at the space  // este comentario es superfluo
+    // Como norma general comentar solo cosas que normalmente en 2 semanas se olvidan
     const bearer = bearerHeader.split(" ");
     // Get token from array
     const bearerToken = bearer[1];

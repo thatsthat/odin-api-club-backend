@@ -5,6 +5,7 @@ const userController = require("./userController");
 const jwt = require("jsonwebtoken");
 
 // Handle Post create on POST.
+// Crear un middleware que verifique el token para no utilizar 4 veces el mismo codigo
 exports.article_create_post = [
   userController.obtainToken,
   (req, res, next) => {
@@ -38,7 +39,7 @@ exports.article_create_post = [
     const article = new Article({
       title: req.body.title,
       text: req.body.text,
-      author: req.body.author,
+      author: req.body.author, // es mas seguro utilizar JWT en el backend para esta variable
       isPublished: true,
     });
 

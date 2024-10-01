@@ -16,12 +16,14 @@ exports.comment_create_post = [
     const errors = validationResult(req);
 
     // Create a Item object with escaped and trimmed data.
+    // Validar que el articulo existe (mongoose deberia controlarlo, revisar!)
     const comment = new Comment({
       text: req.body.text,
     });
 
     if (!errors.isEmpty()) {
       // There are errors.
+      // Podrias invocar next(errors) i en el middleware siguiente gestionar los errores (mirar ejemplo whatsapp)
       return res.status(400).json({ error: errors.array()[0].msg });
     } else {
       // Data from form is valid. Save item.
