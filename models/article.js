@@ -26,11 +26,5 @@ ArticleSchema.virtual("dateFormatted").get(function () {
   });
 });
 
-/* // Virtual for item's URL
-ArticleSchema.virtual("rawText").get(async function () {
-  const author = await User.findById(this.author).exec();
-  return `# ${this.title}\n\n_${this.dateFormatted} by [${author.firstName} ${author.lastName}](/)_\n\n${this.text}\n`;
-}); */
-
 // Export model
 module.exports = mongoose.model("Article", ArticleSchema);

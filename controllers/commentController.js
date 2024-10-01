@@ -31,41 +31,24 @@ exports.comment_create_post = [
   }),
 ];
 
-exports.index = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Site Home Page");
-});
-
-// Display list of all Posts.
-exports.comment_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Post list");
-});
-
-// Display detail page for a specific Post.
-exports.comment_detail = asyncHandler(async (req, res, next) => {
-  res.send(`NOT IMPLEMENTED: Post detail: ${req.params.id}`);
-});
-
-// Display Post create form on GET.
-exports.comment_create_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Post create GET");
-});
-
-// Display Post delete form on GET.
-exports.comment_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Post delete GET");
-});
-
-// Handle Post delete on POST.
-exports.comment_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Post delete POST");
-});
-
-// Display Post update form on GET.
-exports.comment_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Post update GET");
-});
-
-// Handle Post update on POST.
-exports.comment_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLEMENTED: Post update POST");
-});
+exports.comment_delete = [
+  userController.obtainToken,
+  (req, res, next) => {
+    jwt.verify(req.token, "iepiep", (err, authData) => {
+      if (err) {
+        res.sendStatus(403);
+        //res.send(authData);
+      } else {
+        /*         res.json({
+          message: "Post created...",
+          authData,
+        }); */
+        next();
+      }
+    });
+  },
+  asyncHandler(async (req, res, next) => {
+    await Comment.findByIdAndDelete(req.body.commentID);
+    return res.send(JSON.stringify("comment deleted"));
+  }),
+];
