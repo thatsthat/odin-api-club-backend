@@ -9,6 +9,8 @@ const comment_controller = require("../controllers/commentController");
 // */articles
 // En las rutas privadas, poner middleware (para verificar token) antes del controlador
 router.post("/article", article_controller.article_create_post);
+
+// List all public articles in the blog
 router.get("/article_list", article_controller.article_list);
 // */users/:id/articles
 router.get(
@@ -18,7 +20,7 @@ router.get(
 // utilizar metodo 'patch' (parecido a put pero para act)
 // */articles/:id
 router.post(
-  "/article_toggle_published",
+  "/article_toggle_published/:articleId",
   article_controller.article_toggle_published
 );
 // utilizar metodo 'delete' con mismo nombre

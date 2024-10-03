@@ -123,12 +123,11 @@ exports.article_toggle_published = [
     });
   },
   asyncHandler(async (req, res, next) => {
-    let updatedArticle = req.body.article;
-    //console.log(updatedArticle);
-    updatedArticle.isPublished = !updatedArticle.isPublished;
+    let article = await Article.findById(req.params.articleId);
+    article.isPublished = !article.isPublished;
     const savedArticle = await Article.findByIdAndUpdate(
-      updatedArticle._id,
-      updatedArticle,
+      req.params.articleId,
+      article,
       {}
     );
     return res.send(savedArticle);
