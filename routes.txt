@@ -1,10 +1,15 @@
+/// Article ROUTES ///
+
+GET /articles/        # Get all the public articles
+GET /articles/:id     # Get user's articles
+
+POST /articles/       # Create a new article
+PATCH /articles/:id   # Toggle article published status
+
+
+
+
 /// BOOK ROUTES ///
-
-// GET catalog home page.
-/
-
-// GET request for creating a Book. NOTE This must come before routes that display Book (uses id).
-/book/create
 
 // POST request for creating Book.
 /book/create

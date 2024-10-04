@@ -4,38 +4,22 @@ const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 
-/* exports.login000 = (req, res) => {
-  // Mock user
-  const user = {
-    id: 33,
-    username: "iep",
-    email: "iep@gmail.com",
-  };
-
-  jwt.sign({ user }, "iepiep", { expiresIn: "1800s" }, (err, token) => {
-    res.json({
-      token,
-    });
-  });
-}; */
-
 // Verify Token
-exports.obtainToken = (req, res, next) => {
-  // Get auth header value
+exports.validateToken = (req, res, next) => {
   const bearerHeader = req.headers["authorization"];
-  // Check if bearer is undefined
   if (typeof bearerHeader !== "undefined") {
-    // Split at the space  // este comentario es superfluo
-    // Como norma general comentar solo cosas que normalmente en 2 semanas se olvidan
     const bearer = bearerHeader.split(" ");
-    // Get token from array
     const bearerToken = bearer[1];
-    // Set the token
+    // Save token in request for frequent access
     req.token = bearerToken;
-    // Next middleware
-    next();
+    jwt.verify(req.token, "iepiep", (err, authData) => {
+      if (err) {
+        res.sendStatus(403);
+      } else {
+        next();
+      }
+    });
   } else {
-    // Forbidden
     res.sendStatus(403);
   }
 };

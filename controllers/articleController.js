@@ -6,22 +6,8 @@ const jwt = require("jsonwebtoken");
 
 // Handle Post create on POST.
 // Crear un middleware que verifique el token para no utilizar 4 veces el mismo codigo
-exports.article_create_post = [
-  userController.obtainToken,
-  (req, res, next) => {
-    jwt.verify(req.token, "iepiep", (err, authData) => {
-      if (err) {
-        res.sendStatus(403);
-        //res.send(authData);
-      } else {
-        /*         res.json({
-          message: "Post created...",
-          authData,
-        }); */
-        next();
-      }
-    });
-  },
+exports.article_create = [
+  userController.validateToken,
   // Validate and sanitize fields.
   body("title", "Post title must not be empty.")
     .trim()
@@ -80,21 +66,7 @@ ${article.text}`;
 });
 
 exports.user_articles_list = [
-  userController.obtainToken,
-  (req, res, next) => {
-    jwt.verify(req.token, "iepiep", (err, authData) => {
-      if (err) {
-        res.sendStatus(403);
-        //res.send(authData);
-      } else {
-        /*         res.json({
-          message: "Post created...",
-          authData,
-        }); */
-        next();
-      }
-    });
-  },
+  userController.validateToken,
   asyncHandler(async (req, res, next) => {
     const userArticles = await Article.find(
       { author: req.params.userId },
@@ -107,21 +79,7 @@ exports.user_articles_list = [
 ];
 
 exports.article_toggle_published = [
-  userController.obtainToken,
-  (req, res, next) => {
-    jwt.verify(req.token, "iepiep", (err, authData) => {
-      if (err) {
-        res.sendStatus(403);
-        //res.send(authData);
-      } else {
-        /*         res.json({
-          message: "Post created...",
-          authData,
-        }); */
-        next();
-      }
-    });
-  },
+  userController.validateToken,
   asyncHandler(async (req, res, next) => {
     let article = await Article.findById(req.params.articleId);
     article.isPublished = !article.isPublished;
@@ -135,21 +93,7 @@ exports.article_toggle_published = [
 ];
 
 exports.article_delete = [
-  userController.obtainToken,
-  (req, res, next) => {
-    jwt.verify(req.token, "iepiep", (err, authData) => {
-      if (err) {
-        res.sendStatus(403);
-        //res.send(authData);
-      } else {
-        /*         res.json({
-          message: "Post created...",
-          authData,
-        }); */
-        next();
-      }
-    });
-  },
+  userController.validateToken,
   asyncHandler(async (req, res, next) => {
     await Article.findByIdAndDelete(req.body.articleID);
     return res.send(JSON.stringify("article deleted"));

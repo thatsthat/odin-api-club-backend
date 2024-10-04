@@ -2,8 +2,8 @@ const Comment = require("../models/comment");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
 
-// Handle Post create on POST.
-exports.comment_create_post = [
+// Handle comment create
+exports.comment_create = [
   // Validate and sanitize fields.
   body("text", "Comment text must not be empty.")
     .trim()
@@ -34,21 +34,7 @@ exports.comment_create_post = [
 ];
 
 exports.comment_delete = [
-  userController.obtainToken,
-  (req, res, next) => {
-    jwt.verify(req.token, "iepiep", (err, authData) => {
-      if (err) {
-        res.sendStatus(403);
-        //res.send(authData);
-      } else {
-        /*         res.json({
-          message: "Post created...",
-          authData,
-        }); */
-        next();
-      }
-    });
-  },
+  userController.validateToken,
   asyncHandler(async (req, res, next) => {
     await Comment.findByIdAndDelete(req.body.commentID);
     return res.send(JSON.stringify("comment deleted"));

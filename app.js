@@ -6,7 +6,7 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 var bcrypt = require("bcryptjs");
 var cors = require("cors");
-var blogRouter = require("./routes/blog");
+var articlesRouter = require("./routes/articles");
 var usersRouter = require("./routes/users");
 
 var app = express();
@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use(cors({ origin: process.env.ORIGIN }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/blog", blogRouter);
+app.use("/articles", articlesRouter);
 app.use("/users", usersRouter);
 
 module.exports = app;
