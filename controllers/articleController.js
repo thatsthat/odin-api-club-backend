@@ -95,7 +95,7 @@ exports.article_toggle_published = [
 exports.article_delete = [
   userController.validateToken,
   asyncHandler(async (req, res, next) => {
-    await Article.findByIdAndDelete(req.body.articleID);
+    await Article.findByIdAndDelete(req.params.articleId);
     return res.send(JSON.stringify("article deleted"));
   }),
 ];
