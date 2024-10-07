@@ -28,7 +28,7 @@ router.delete("/:articleId", article_controller.article_delete);
 router.post("/:articleId/comments", comment_controller.comment_create);
 
 // Get all comments for a given article
-router.get("/:articleId/comments", comment_controller.comment_create_post);
+// router.get("/:articleId/comments", comment_controller.comment_create_post);
 
 // Delete Comment
 router.delete("/:articleId/comments", comment_controller.comment_delete);

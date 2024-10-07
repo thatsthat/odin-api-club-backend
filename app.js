@@ -24,11 +24,18 @@ async function main() {
   await mongoose.connect(mongoDB);
 }
 
+var options = {
+  origin: process.env.ORIGIN,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({ origin: process.env.ORIGIN }));
+app.use(cors(options));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/articles", articlesRouter);
