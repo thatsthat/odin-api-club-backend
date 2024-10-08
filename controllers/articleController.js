@@ -69,7 +69,7 @@ exports.user_articles_list = [
   userController.validateToken,
   asyncHandler(async (req, res, next) => {
     const userArticles = await Article.find(
-      { author: req.params.userId },
+      { author: req.userData._id },
       "title isPublished date rawText"
     )
       .sort({ title: 1 })
@@ -81,6 +81,7 @@ exports.user_articles_list = [
 exports.article_toggle_published = [
   userController.validateToken,
   asyncHandler(async (req, res, next) => {
+    // ToDO Check that articleId belongs to logged in user.
     let article = await Article.findById(req.params.articleId);
     article.isPublished = !article.isPublished;
     const savedArticle = await Article.findByIdAndUpdate(
@@ -95,6 +96,7 @@ exports.article_toggle_published = [
 exports.article_delete = [
   userController.validateToken,
   asyncHandler(async (req, res, next) => {
+    // ToDO Check that articleId belongs to logged in user.
     await Article.findByIdAndDelete(req.params.articleId);
     return res.send(JSON.stringify("article deleted"));
   }),

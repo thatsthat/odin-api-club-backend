@@ -5,6 +5,7 @@ const userController = require("./userController");
 
 // Handle comment create
 exports.comment_create = [
+  userController.validateToken,
   // Validate and sanitize fields.
   body("text", "Comment text must not be empty.")
     .trim()
@@ -20,6 +21,8 @@ exports.comment_create = [
     // Validar que el articulo existe (mongoose deberia controlarlo, revisar!)
     const comment = new Comment({
       text: req.body.text,
+      article: req.params.articleId,
+      author: req.userData._id,
     });
 
     if (!errors.isEmpty()) {
@@ -39,5 +42,18 @@ exports.comment_delete = [
   asyncHandler(async (req, res, next) => {
     await Comment.findByIdAndDelete(req.body.commentID);
     return res.send(JSON.stringify("comment deleted"));
+  }),
+];
+
+exports.comment_list = [
+  userController.validateToken,
+  asyncHandler(async (req, res, next) => {
+    const articleComments = await Comment.find(
+      { author: req.params.articleId },
+      "title isPublished date rawText"
+    )
+      .sort({ title: 1 })
+      .exec();
+    return res.send(articleComments);
   }),
 ];

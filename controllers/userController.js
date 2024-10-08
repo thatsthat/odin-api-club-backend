@@ -12,7 +12,7 @@ exports.validateToken = (req, res, next) => {
     const bearerToken = bearer[1];
     // Save token in request for frequent access
     req.token = bearerToken;
-    jwt.verify(req.token, "iepiep", (err, authData) => {
+    req.userData = jwt.verify(req.token, "iepiep", (err, authData) => {
       if (err) {
         res.sendStatus(403);
       } else {

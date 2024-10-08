@@ -9,7 +9,7 @@ const opts = { toJSON: { virtuals: true } };
 const ArticleSchema = new Schema(
   {
     title: { type: String, required: true, maxLength: 100 },
-    text: { type: String, maxLength: 400 },
+    text: { type: String, maxLength: 4000 },
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
     isPublished: { type: Boolean },
     date: { type: Date, default: Date.now },

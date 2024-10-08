@@ -13,7 +13,7 @@ router.post("/", article_controller.article_create);
 // List all public articles in the blog
 router.get("/", article_controller.article_list);
 // */users/:id/articles
-router.get("/:userId", article_controller.user_articles_list);
+router.get("/list", article_controller.user_articles_list);
 // utilizar metodo 'patch' (parecido a put pero para act)
 // */articles/:id
 router.patch("/:articleId", article_controller.article_toggle_published);
@@ -28,7 +28,7 @@ router.delete("/:articleId", article_controller.article_delete);
 router.post("/:articleId/comments", comment_controller.comment_create);
 
 // Get all comments for a given article
-// router.get("/:articleId/comments", comment_controller.comment_create_post);
+router.get("/:articleId/comments", comment_controller.comment_list);
 
 // Delete Comment
 router.delete("/:articleId/comments", comment_controller.comment_delete);
