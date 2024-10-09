@@ -8,6 +8,8 @@ const comment_controller = require("../controllers/commentController");
 // Utilizar url en vez de body en los endpoints que no sean post/patch/update
 // */articles
 // En las rutas privadas, poner middleware (para verificar token) antes del controlador
+// Separar rutas publicas y privadas
+// Intentar evitar mezclar partes estaticas y dinamicas en la misma posicion de la url
 router.post("/", article_controller.article_create);
 
 // List all public articles in the blog

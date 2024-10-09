@@ -39,6 +39,10 @@ app.use(cors(options));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/articles", articlesRouter);
+
+// Crear una carpeta extra para el middleware
+// app.use("/users", validateToken, usersRouter);
+
 app.use("/users", usersRouter);
 
 module.exports = app;
