@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use(cors({ origin: process.env.ORIGIN }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/public", publicRouter);
+app.use("/", publicRouter);
 app.use("/private", auth.validateToken, privateRouter);
 
 module.exports = app;
