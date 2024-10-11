@@ -10,7 +10,6 @@ router.post("/", article_controller.article_create);
 router.patch("/:articleId", article_controller.article_toggle_published);
 router.delete("/:articleId", article_controller.article_delete);
 
-router.get("/:articleId/comments", comment_controller.comment_list);
 router.post("/:articleId/comments", comment_controller.comment_create);
 router.delete("/:articleId/comments", comment_controller.comment_delete);
 
