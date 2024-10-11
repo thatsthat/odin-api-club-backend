@@ -45,8 +45,8 @@ exports.comment_delete = [
 exports.comment_list = [
   asyncHandler(async (req, res, next) => {
     const articleComments = await Comment.find(
-      { author: req.params.articleId },
-      "title isPublished date rawText"
+      { article: req.params.articleId },
+      "author article date text"
     )
       .sort({ title: 1 })
       .exec();
