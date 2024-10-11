@@ -1,11 +1,9 @@
 const Comment = require("../models/comment");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
-const userController = require("./userController");
 
 // Handle comment create
 exports.comment_create = [
-  userController.validateToken,
   // Validate and sanitize fields.
   body("text", "Comment text must not be empty.")
     .trim()
@@ -22,7 +20,7 @@ exports.comment_create = [
     const comment = new Comment({
       text: req.body.text,
       article: req.params.articleId,
-      author: req.userData._id,
+      author: req.user._id,
     });
 
     if (!errors.isEmpty()) {
@@ -38,7 +36,6 @@ exports.comment_create = [
 ];
 
 exports.comment_delete = [
-  userController.validateToken,
   asyncHandler(async (req, res, next) => {
     await Comment.findByIdAndDelete(req.body.commentID);
     return res.send(JSON.stringify("comment deleted"));
@@ -46,7 +43,6 @@ exports.comment_delete = [
 ];
 
 exports.comment_list = [
-  userController.validateToken,
   asyncHandler(async (req, res, next) => {
     const articleComments = await Comment.find(
       { author: req.params.articleId },

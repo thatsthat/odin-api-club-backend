@@ -1,13 +1,9 @@
 const Article = require("../models/article");
 const asyncHandler = require("express-async-handler");
 const { body, validationResult } = require("express-validator");
-const userController = require("./userController");
-const jwt = require("jsonwebtoken");
 
 // Handle Post create on POST.
-// Crear un middleware que verifique el token para no utilizar 4 veces el mismo codigo
 exports.article_create = [
-  userController.validateToken,
   // Validate and sanitize fields.
   body("title", "Post title must not be empty.")
     .trim()
@@ -65,39 +61,31 @@ ${article.text}`;
   return res.send(allPosts);
 });
 
-exports.user_articles_list = [
-  userController.validateToken,
-  asyncHandler(async (req, res, next) => {
-    const userArticles = await Article.find(
-      { author: req.userData._id },
-      "title isPublished date rawText"
-    )
-      .sort({ title: 1 })
-      .exec();
-    return res.send(userArticles);
-  }),
-];
+exports.user_articles_list = asyncHandler(async (req, res, next) => {
+  console.log(req.user);
+  const userArticles = await Article.find(
+    { author: req.user._id },
+    "title isPublished date rawText"
+  )
+    .sort({ title: 1 })
+    .exec();
+  return res.send(userArticles);
+});
 
-exports.article_toggle_published = [
-  userController.validateToken,
-  asyncHandler(async (req, res, next) => {
-    // ToDO Check that articleId belongs to logged in user.
-    let article = await Article.findById(req.params.articleId);
-    article.isPublished = !article.isPublished;
-    const savedArticle = await Article.findByIdAndUpdate(
-      req.params.articleId,
-      article,
-      {}
-    );
-    return res.send(savedArticle);
-  }),
-];
+exports.article_toggle_published = asyncHandler(async (req, res, next) => {
+  // ToDO Check that articleId belongs to logged in user.
+  let article = await Article.findById(req.params.articleId);
+  article.isPublished = !article.isPublished;
+  const savedArticle = await Article.findByIdAndUpdate(
+    req.params.articleId,
+    article,
+    {}
+  );
+  return res.send(savedArticle);
+});
 
-exports.article_delete = [
-  userController.validateToken,
-  asyncHandler(async (req, res, next) => {
-    // ToDO Check that articleId belongs to logged in user.
-    await Article.findByIdAndDelete(req.params.articleId);
-    return res.send(JSON.stringify("article deleted"));
-  }),
-];
+exports.article_delete = asyncHandler(async (req, res, next) => {
+  // ToDO Check that articleId belongs to logged in user.
+  await Article.findByIdAndDelete(req.params.articleId);
+  return res.send(JSON.stringify("article deleted"));
+});

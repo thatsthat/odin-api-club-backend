@@ -4,31 +4,6 @@ const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 
-// Verify Token
-exports.validateToken = (req, res, next) => {
-  const bearerHeader = req.headers["authorization"];
-  // Mejor usar negacion para terminar si no hay bearer, y me ahorro el siguiente else
-  if (typeof bearerHeader !== "undefined") {
-    const bearer = bearerHeader.split(" ");
-    const bearerToken = bearer[1];
-    // Save token in request for frequent access
-    req.token = bearerToken;
-    // Mirar la manera de hacer asincrono con try/catch (sin pasar la funcion)
-    jwt.verify(req.token, "iepiep", (err, authData) => {
-      if (err) {
-        console.log(err);
-        console.log(req.token);
-        res.sendStatus(403);
-      } else {
-        req.userData = authData;
-        next();
-      }
-    });
-  } else {
-    res.sendStatus(403);
-  }
-};
-
 // Handle Post create on POST.
 exports.signup = [
   // Validate and sanitize fields.
