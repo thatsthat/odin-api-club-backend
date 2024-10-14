@@ -2,15 +2,14 @@ var express = require("express");
 var router = express.Router();
 
 // Require controller modules.
-const article_controller = require("../controllers/articleController");
-const comment_controller = require("../controllers/commentController");
+const article = require("../controllers/articleController");
 
-router.get("/", article_controller.user_articles_list);
-router.post("/", article_controller.article_create);
-router.patch("/:articleId", article_controller.article_toggle_published);
-router.delete("/:articleId", article_controller.article_delete);
+router.get("/", article.list_user);
+router.post("/", article.create);
+router.patch("/:articleId", article.toggle_published);
+router.delete("/:articleId", article.delete);
 
-router.post("/:articleId/comments", comment_controller.comment_create);
-router.delete("/:articleId/comments", comment_controller.comment_delete);
+router.patch("/:articleId/comments", article.comment_create);
+router.delete("/:articleId/comments", article.comment_delete);
 
 module.exports = router;

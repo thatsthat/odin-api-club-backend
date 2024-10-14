@@ -6,6 +6,15 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const opts = { toJSON: { virtuals: true } };
+
+const CommentSchema = new Schema({
+  text: { type: String, maxLength: 400 },
+  author: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  article: { type: Schema.Types.ObjectId, ref: "Article", required: true }, // reference to the belonging article
+  date: { type: Date, default: Date.now },
+  // Opcional comentario de comentario (campo extra con 'parent comment')
+});
+
 const ArticleSchema = new Schema(
   {
     title: { type: String, required: true, maxLength: 100 },
@@ -13,6 +22,7 @@ const ArticleSchema = new Schema(
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
     isPublished: { type: Boolean },
     date: { type: Date, default: Date.now },
+    comments: [CommentSchema],
   },
   opts
 );
