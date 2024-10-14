@@ -51,13 +51,13 @@ exports.list = asyncHandler(async (req, res, next) => {
       month: "long",
       day: "numeric",
     });
-    article.markDown = `# ${article.title}
+    const markDownText = `# ${article.title}
 
 \_${dateFormatted} by [${article.author.firstName} ${article.author.lastName}](/)_
 
 ${article.text}`;
 
-    return article;
+    return { ...article, markDown: markDownText };
   });
 
   return res.send(allPosts);
