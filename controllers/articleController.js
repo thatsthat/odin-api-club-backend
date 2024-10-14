@@ -46,18 +46,20 @@ exports.list = asyncHandler(async (req, res, next) => {
     .exec();
 
   const allPosts = allArticles.map((article) => {
-    console.log(article.date);
     const dateFormatted = article.date.toLocaleDateString("en-GB", {
       year: "numeric",
       month: "long",
       day: "numeric",
     });
-    return `# ${article.title}
+    article.markDown = `# ${article.title}
 
 \_${dateFormatted} by [${article.author.firstName} ${article.author.lastName}](/)_
 
 ${article.text}`;
+
+    return article;
   });
+
   return res.send(allPosts);
 });
 
