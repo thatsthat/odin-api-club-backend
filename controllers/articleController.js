@@ -39,26 +39,17 @@ exports.create = [
 exports.list = asyncHandler(async (req, res, next) => {
   const allArticles = await Article.find(
     { isPublished: true },
-    "title text author rawText date"
+    "title text author rawText date comments"
   )
     .sort({ title: 1 })
     .populate("author")
     .exec();
 
-  const allPosts = allArticles.map((article) => {
-    const dateFormatted = article.date.toLocaleDateString("en-GB", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    const markDownText = `# ${article.title}
+  const allPosts = allArticles;
 
-\_${dateFormatted} by [${article.author.firstName} ${article.author.lastName}](/)_
-
-${article.text}`;
-
-    return { ...article, markDown: markDownText };
-  });
+  /* const allPosts = allArticles.map((article) => {
+    article;
+  }); */
 
   return res.send(allPosts);
 });

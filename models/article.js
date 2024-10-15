@@ -36,5 +36,13 @@ ArticleSchema.virtual("dateFormatted").get(function () {
   });
 });
 
+ArticleSchema.virtual("markDownText").get(function () {
+  return `# ${this.title}
+
+\_${this.dateFormatted} by [${this.author.firstName} ${this.author.lastName}](/)_
+
+${this.text}`;
+});
+
 // Export model
 module.exports = mongoose.model("Article", ArticleSchema);
