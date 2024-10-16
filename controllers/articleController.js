@@ -5,11 +5,8 @@ const { body, validationResult } = require("express-validator");
 // Handle Post create on POST.
 exports.create = [
   // Validate and sanitize fields.
-  body("title", "Post title must not be empty.")
-    .trim()
-    .isLength({ min: 1 })
-    .escape(),
-  body("text", "Post text must not be empty.").isLength({ min: 1 }).escape(),
+  body("title", "Post title must not be empty.").trim().isLength({ min: 1 }),
+  body("text", "Post text must not be empty.").isLength({ min: 1 }),
 
   // Process request after validation and sanitization.
   asyncHandler(async (req, res, next) => {
@@ -39,7 +36,7 @@ exports.create = [
 exports.list = asyncHandler(async (req, res, next) => {
   const allArticles = await Article.find(
     { isPublished: true },
-    "title text author rawText date comments"
+    "title text author date comments"
   )
     .sort({ title: 1 })
     .populate("author")
@@ -58,7 +55,7 @@ exports.list_user = asyncHandler(async (req, res, next) => {
   console.log(req.user);
   const userArticles = await Article.find(
     { author: req.user._id },
-    "title isPublished date rawText"
+    "title isPublished date author"
   )
     .sort({ title: 1 })
     .exec();
