@@ -131,6 +131,7 @@ exports.comment_list = [
       "author article date text"
     )
       .sort({ title: 1 })
+      .populate("author")
       .exec();
     return res.send(articleComments);
   }),
