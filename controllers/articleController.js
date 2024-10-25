@@ -40,6 +40,7 @@ exports.list = asyncHandler(async (req, res, next) => {
   )
     .sort({ title: 1 })
     .populate("author")
+    .populate({ path: "comments", populate: { path: "author" } })
     .exec();
 
   const allPosts = allArticles;
